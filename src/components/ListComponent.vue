@@ -15,7 +15,7 @@
                     <form>
                         <div class="form-group">
                             <label for="valor">Valor da Transação</label>
-                            <input v-model="valor" type="text" class="form-control" id="valor" aria-describedby="valor" placeholder="">
+                            <input v-model="valor" type="number" min="0" class="form-control" id="valor" aria-describedby="valor" placeholder="">
                         </div>
                     </form>
                 </div>
@@ -88,10 +88,10 @@ export default Vue.extend({
             this.conta = c;
         },
         depositar() {
-            let val = Number(this.valor.replace(/[^0-9.-]+/g,""));
-            this.$http.put('http://localhost:8000/api/depositar/'+this.conta.id, {valor: val}).then((response) => {
+            this.$http.put('http://localhost:8000/api/depositar/'+this.conta.id, {valor: this.valor}).then((response) => {
                 if (response.status == 200) {
                     this.getContas();
+                    this.conta = null;
                 }
             });
         },
@@ -99,6 +99,7 @@ export default Vue.extend({
             this.$http.put('http://localhost:8000/api/sacar/'+this.conta.id, {valor: this.valor}).then((response) => {
                 if (response.status == 200) {
                     this.getContas();
+                    this.conta = null;
                 }
             });
         },
